@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>
+        List all Quotes from local Storage
+    </title>
+</head>
+<body onload="getQuotesLocal()">
+<form>
+<h2 text-align ='centre'>Quotify</h2> </br>
+<a href='index.html'>Random Quote (API)</a> |
+<a href='saved_quotes.html'>Random Quote (Local)</a> |
+<a href='new_quote.html'>Add Quote</a> |
+<a href='list_all_saved_quotes.2.html'>List All Quotes(Local)</a> </br>
+
+<!-- <button onClick = "getQuotesLocal()"> Get another Quote </button> -->
+
+</form>
+
+<script>
+let localDB = localStorage.getItem('localQuotes') ? JSON.parse(localStorage.getItem('localQuotes')) : []
+
+function getQuotesLocal()
+{
+    event.preventDefault()
+
+if (localStorage.getItem('localQuotes'))
+{
+    localDB = JSON.parse(localStorage.getItem('localQuotes'))
+ //   let txt = localDB[Math.round(Math.random()*localDB.length)]
+
+alert(localDB.length)
+for (var i=0;i<localDB.length;i++)
+{
+ if (localDB[i].quote != undefined)
+    {
+    let txtHandler1 = document.createElement('textarea')
+    txtHandler1.setAttribute('rows',5)
+    txtHandler1.setAttribute('cols',100)
+    txtHandler1.innerText = `"${localDB[i].quote}"  \n - ${localDB[i].author}`   
+
+    document.body.appendChild(txtHandler1)
+    } 
+}
+}
+else 
+txtHandler2.innerText = "Nothing available in local storage"
+}
+
+</script>
+</body>
+</html>

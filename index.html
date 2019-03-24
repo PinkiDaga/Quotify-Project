@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>
+        Get Quotes using API
+    </title>
+</head>
+<body onload="getQuotes()">
+<!-- <body> -->
+<form>
+<h2 text-align ='centre'>Quotify</h2> </br>
+<a href='index.html'>Random Quote (API)</a> |
+<a href='saved_quotes.html'>Random Quote (Local)</a> |
+<a href='new_quote.html'>Add Quote</a> |
+<a href='list_all_saved_quotes.2.html'>List All Quotes(Local)</a> </br>
+<textarea id='txtQuotes' cols = '100' rows='10'></textarea></br>
+<button onClick = {getQuotes()}> Get another Quote </button>
+<button id = 'saveBtn' onClick = {saveLocal()} > Save the Quote in Local</button> 
+</form>
+
+<script>
+let localDB = localStorage.getItem('localQuotes') ? JSON.parse(localStorage.getItem('localQuotes')) : []
+const txtHandler = document.getElementById('txtQuotes')
+const thisBtn = document.getElementById('saveBtn')
+
+let apiquotes;
+let apiauthor;
+
+function getQuotes()
+{
+event.preventDefault()
+
+// const url = `http://www.talaikis.com/api/quotes/random/`
+const url = 'http://quotes.stormconsultancy.co.uk/random.json'
+const xhr = new XMLHttpRequest()
+xhr.open('GET',url)
+
+xhr.send()
+
+xhr.onload = function()
+{
+    const quoteDefault = JSON.parse(xhr.responseText)
+    apiquotes = quoteDefault.quote
+    apiauthor = quoteDefault.author
+    txtHandler.innerHTML = `" ${quoteDefault.quote}" \n  - ${quoteDefault.author}  `
+    txtHandler.disabled = true
+}
+
+    //change the button label and enable the button
+    
+    thisBtn.innerText = 'Save the Quote in Local'
+    thisBtn.disabled = false
+}
+
+function saveLocal()
+{
+  //  event.preventDefault()
+
+    let localQuote = {
+        quote:apiquotes,
+        author: apiauthor
+    }
+
+    localDB.push(localQuote)
+    localStorage.setItem('localQuotes',JSON.stringify(localDB))
+
+    //change the button label and disable the button
+
+    
+    thisBtn.innerText = 'Saved'
+    thisBtn.disabled = true
+
+    // localDB = JSON.parse(localStorage.getItem('localQuotes'))
+     alert(localDB)
+}
+
+</script>
+</body>
+</html>

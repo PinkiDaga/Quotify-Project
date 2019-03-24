@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>
+        Edit Quotes in local Storage
+    </title>
+</head>
+<body onload="getQuotesLocal()">
+<form>
+<h2 text-align ='centre'>Quotify</h2> </br>
+<a href='index.html'>Random Quote (API)</a> |
+<a href='saved_quotes.html'>Random Quote (Local)</a> |
+<a href='new_quote.html'>Add Quote</a> |
+<a href='list_all_saved_quotes.2.html'>List All Quotes(Local)</a> </br>
+
+<!-- <button onClick = "getQuotesLocal()"> Get another Quote </button> -->
+
+</form>
+
+<script>
+
+let localDB = localStorage.getItem('localQuotes') ? JSON.parse(localStorage.getItem('localQuotes')) : []
+
+//new varables we want to update with
+let newQuote;
+let newAuthor;
+//varables we want to edit
+let editQuote;
+let editAuthor;
+
+let oldQuote;
+
+let spantxt ;
+
+function getQuotesLocal()
+{
+    event.preventDefault()
+
+if (localStorage.getItem('localQuotes'))
+{
+    localDB = JSON.parse(localStorage.getItem('localQuotes'))
+
+//alert(localDB.length)
+for (var i=0;i<localDB.length;i++)
+{
+ if (localDB[i].quote != undefined)
+    {
+    let txtHandler1 = document.createElement('textarea')
+    txtHandler1.setAttribute('rows',5)
+    txtHandler1.setAttribute('cols',100)
+    txtHandler1.innerText = `"${localDB[i].quote}"  \n - ${localDB[i].author}`   
+    txtHandler1.disabled = true
+    spantxt = document.createElement('span')
+    spantxt.setAttribute('id','spantxt')
+
+    let btnDelete = document.createElement('button')
+    var t = document.createTextNode("Delete");
+    btnDelete.setAttribute("style","color:red;font-size:23px");
+    
+    btnDelete.setAttribute('onClick',`removeQuote("${localDB[i].quote}")`)
+
+    let btnUpdate = document.createElement('button')
+    var d = document.createTextNode("Edit");
+    btnUpdate.setAttribute("style","color:red;font-size:23px");
+    btnUpdate.setAttribute('onClick',`openQuote("${localDB[i].quote}","${localDB[i].author}")`)
+
+    document.body.appendChild(txtHandler1)
+    btnUpdate.appendChild(d);
+    document.body.appendChild(btnUpdate)
+    btnDelete.appendChild(t);
+    document.body.appendChild(btnDelete)
+    } 
+}
+}
+else 
+alert("Nothing available in local storage")
+}
+
+function removeQuote(del)
+{
+
+for (var i=0;i<localDB.length;i++)
+{
+ if (localDB[i].quote == del)
+    {
+        localDB.splice(i,1)
+        localStorage.removeItem('localQuotes')
+        localStorage.setItem('localQuotes',JSON.stringify(localDB))
+        alert(`Quote deleted,localQuotes[${i}]`)
+        location.reload()
+        break;
+    }
+}
+}
+
+function openQuote(updtQuote,updtAuthor)
+{
+    
+    event.preventDefault()
+    // alert(updtQuote)
+    // alert(updtAuthor)
+
+ //   let formEdit = document.getElementById('spantxt')
+    let formEdit = document.createElement('form')
+ //   formEdit.setAttribute('method','POST')
+ //   formEdit.setAttribute('class','form-inline')
+    editQuote = document.createElement('textarea')
+    editQuote.setAttribute('rows',5)
+    editQuote.setAttribute('cols',100)
+    editQuote.innerText = updtQuote //defaulted to existing quote
+
+    oldQuote = updtQuote //will be used to compare against localStorage
+
+    editAuthor = document.createElement('textarea')
+    editAuthor.setAttribute('rows',5)
+    editAuthor.setAttribute('cols',100)
+    editAuthor.innerText = updtAuthor //defaulted to existing quote
+    // </form>
+
+    let btnEdit = document.createElement('button')
+    var ed = document.createTextNode("Update");
+    btnEdit.setAttribute("style","color:red;font-size:15px");
+  //  btnEdit.setAttribute('onClick',changeQuote(editQuote.innerText,editAuthor.value,oldQuote))
+    btnEdit.appendChild(ed)
+
+    let btnCancel = document.createElement('button')
+    var can = document.createTextNode("Cancel");
+    btnCancel.setAttribute("style","color:red;font-size:15px");
+    btnCancel.appendChild(can)
+
+    formEdit.appendChild(editQuote)
+    formEdit.appendChild(editAuthor)
+    formEdit.appendChild(btnEdit)
+    formEdit.appendChild(btnCancel)
+
+   // document.getElementsByTagName('body')[0].appendChild(formEdit);
+    document.body.appendChild(formEdit)
+
+    btnEdit.addEventListener('click',function()
+    {
+        event.preventDefault()
+        changeQuote(editQuote.value,editAuthor.value,updtQuote)
+    })
+}
+
+function changeQuote(newQuote,newAuthor,oldQuote)
+{
+    let objQuote = {
+        quote:newQuote,
+        author:newAuthor
+    }
+
+console.log(newQuote,newAuthor,oldQuote)
+for (var i=0;i<localDB.length;i++)
+{
+ if (localDB[i].quote == oldQuote)
+    {
+        localDB.splice(i,1)
+        localDB.push(objQuote)
+        localStorage.removeItem('localQuotes')
+        localStorage.setItem('localQuotes',JSON.stringify(localDB))
+    //    alert(`Quote updated,${oldQuote},${newQuote}`)
+        location.reload()
+        break;
+    }
+}
+}
+
+</script>
+</body>
+</html>

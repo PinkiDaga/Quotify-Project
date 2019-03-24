@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>
+        Save your own quotes
+    </title>
+</head>
+<body>
+<form>
+<h2 text-align ='centre'>Quotify</h2> </br>
+<a href='index.html'>Random Quote (API)</a> |
+<a href='saved_quotes.html'>Random Quote (Local)</a> |
+<a href='new_quote.html'>Add Quote</a> |
+<a href='list_all_saved_quotes.2.html'>List All Quotes(Local)</a> </br>
+<textarea id='txtQuotes' cols = '100' rows='10'></textarea></br>
+<textarea id='txtAuthor' cols = '100' rows='4'></textarea></br>
+<button onClick = {saveQuotes()} id = 'saveBtn'> Save Quote </button> 
+</form>
+
+<script>
+let localDB = localStorage.getItem('localQuotes') ? JSON.parse(localStorage.getItem('localQuotes')) : []
+const txtHandler = document.getElementById('txtQuotes')
+const authorHandler = document.getElementById('txtAuthor')
+
+function saveQuotes()
+{
+  //  event.preventDefault()
+if (txtHandler.value !=='' & authorHandler.value!=='')
+{
+    let myQuote = {
+        quote:txtHandler.value,
+        author:authorHandler.value
+    }
+
+    localDB.push(myQuote)
+    localStorage.setItem('localQuotes',JSON.stringify(localDB))
+
+    taskFormHandle.reset()
+}
+else
+alert ('Both Quote and Author needs to be filled')
+}
+
+</script>
+</body>
+</html>

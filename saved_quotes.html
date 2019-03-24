@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>
+        Get Quotes from local Storage
+    </title>
+</head>
+<body onload="getQuotesLocal()">
+<form>
+<h2 text-align ='centre'>Quotify</h2> </br>
+<a href='index.html'>Random Quote (API)</a> |
+<a href='saved_quotes.html'>Random Quote (Local)</a> |
+<a href='new_quote.html'>Add Quote</a> |
+<a href='list_all_saved_quotes.2.html'>List All Quotes(Local)</a> </br>
+<textarea id='txtQuotes2' cols = '100' rows='10'></textarea></br>
+<button onClick = "getQuotesLocal()"> Get another Quote </button>
+
+</form>
+
+<script>
+let localDB2 = []
+const txtHandler2 = document.getElementById('txtQuotes2')
+
+function getQuotesLocal()
+{
+    event.preventDefault()
+
+if (localStorage.getItem('localQuotes'))
+{
+    localDB2 = JSON.parse(localStorage.getItem('localQuotes'))
+ 
+   // localDB = (localStorage.getItem('localQuotes'))
+
+   let txt = localDB2[Math.round(Math.random()*localDB2.length)]
+
+ if (txt.quote !== undefined)
+    {
+    txtHandler2.innerText = `"${txt.quote}"  \n  -  ${txt.author}`   
+    txtHandler2.disabled = true
+    } 
+}
+else 
+txtHandler2.innerText = "Nothing available in local storage"
+}
+
+</script>
+</body>
+</html>
